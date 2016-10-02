@@ -1,4 +1,4 @@
-<div><h1 style="margin-bottom:0px;"> Twitch Bot <img style="height:40px;margin-bottom:0px;" src="https://i.nuuls.com/PmTS.png"></h1>
+<div><h1 style="margin-bottom:0px;"> Twitch Bot <img alt="Kappa" src="https://i.nuuls.com/xfk-.png"></h1>
 <h2 style="margin-top:0px;"> in node.js </h2></div>
 
 
