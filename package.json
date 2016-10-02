@@ -1,12 +1,12 @@
 {
   "name": "ircbot",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.2.0",
+  "description": "A Twitch Bot made in node.js",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "https://github.com/ian321",
   "license": "ISC",
   "dependencies": {
     "tmi.js": "git+https://github.com/inooid/tmi.js.git"

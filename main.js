@@ -3,9 +3,8 @@
   IRC Bot in node.js
 */
 const tmi = require('tmi.js');
-const _ = require('lodash');
 
-const lib = require('./lib');
+const lib = require('./lib.js');
 const conf = require('././config.json');
 
 const options = {
@@ -42,7 +41,8 @@ const commands = {
     '!say': say,
     '*ping': ping,
     '!list': list,
-    '!node': node
+    '!node': node,
+    '*gtfo': gtfo
 };
 
 // Message handler
@@ -64,11 +64,27 @@ client.on('chat', function(channel, user, message, self) {
             channel = channel.substring(1);
             if (admins.includes(user.username)) {
                 user.admin = true;
+            } else {
+                user.admin = false;
             }
             commands[command](channel, user, message, args);
         }
     }
 });
+
+// Join / Leave
+client.on("join", function(channel, username, self) {
+    if (username === conf.username) {
+        sendMessage(channel, conf.messages.join);
+    }
+});
+
+function gtfo(channel, user, message, args) {
+    if (user.admin) {
+        return sendMessage(channel, conf.messages.leave) && process.exit(0);
+    }
+}
+
 
 // Commands as function
 function say(channel, user, message, args) {
