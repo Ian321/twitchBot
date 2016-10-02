@@ -37,7 +37,7 @@ setInterval(() => {
     }
 }, 5000);
 
-
+// Map a command to a function
 const commands = {
     '!say': say,
     '*ping': ping,
@@ -45,6 +45,7 @@ const commands = {
     '!node': node
 };
 
+// Message handler
 function sendMessage(channel, message) {
     lastMS = message + " ";
     return client.say(channel, message + " ").catch(err => console.log('Message not send.'));
@@ -69,7 +70,7 @@ client.on('chat', function(channel, user, message, self) {
     }
 });
 
-/* Commands as function */
+// Commands as function
 function say(channel, user, message, args) {
     if (user.admin) {
         return sendMessage(channel, args.join(" "));

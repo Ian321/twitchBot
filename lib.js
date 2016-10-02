@@ -3,6 +3,7 @@
 */
 module.exports = {
   msToTimeSting: function (ms) {
+    // This functions converts ms to a human friendly string.
     sec = Math.floor(ms / 1000);
     days = Math.floor(sec / 86400);
 		hours= Math.floor(sec / 3600 % 60 % 60 % 24);
