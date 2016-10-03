@@ -3,6 +3,8 @@
   IRC Bot in node.js
 */
 const tmi = require('tmi.js');
+const mathjs = require('mathjs');
+const _ = require('lodash');
 
 const lib = require('./lib.js');
 const conf = require('././config.json');
@@ -26,7 +28,6 @@ const client = tmi.client(options);
 client.connect();
 const startTime = Date.now();
 const admins = conf.admins;
-var lastMS = "";
 
 const messages = [];
 
@@ -42,12 +43,13 @@ const commands = {
     '*ping': ping,
     '!list': list,
     '!node': node,
-    '*gtfo': gtfo
+    '*gtfo': gtfo,
+    '!sha512': sha512,
+    '*math': math
 };
 
 // Message handler
 function sendMessage(channel, message) {
-    lastMS = message + " ";
     return client.say(channel, message + " ").catch(err => console.log('Message not send.'));
 }
 
@@ -106,4 +108,21 @@ function list(channel, user, message, args) {
 
 function node(channel, user, message, args) {
     return sendMessage(channel, "i run on node js FeelsGoodMan");
+}
+
+function sha512(channel, user, message, args) {
+  return sendMessage(channel, require('crypto').createHash('sha512').update(args.join(" ")).digest('hex'));
+}
+
+function math(channel, user, message, args) {
+  var tmp = message.substr(message.indexOf(" ") + 1).replace(/ /g,'');
+  try {
+    var result = mathjs.eval(tmp);
+    if (! _.isSafeInteger(result)) {
+      result = "WutFace buffer overload!";
+    }
+    return sendMessage(channel, `${user.username}, ${result}`);
+  } catch (e) {
+    return sendMessage(channel, `${user.username}, invalid input OMGScoots`);
+  }
 }

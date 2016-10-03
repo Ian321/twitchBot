@@ -9,6 +9,8 @@
   "author": "https://github.com/ian321",
   "license": "ISC",
   "dependencies": {
+    "lodash": "^4.16.2",
+    "mathjs": "^3.5.3",
     "tmi.js": "git+https://github.com/inooid/tmi.js.git"
   }
 }
