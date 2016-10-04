@@ -116,7 +116,7 @@ function sha512(channel, user, message, args) {
 }
 
 function math(channel, user, message, args) {
-  var tmp = message.substr(message.indexOf(" ") + 1).replace(/ /g,'');
+  var tmp = message.substr(message.indexOf(" ") + 1);
   try {
     var result = mathjs.eval(tmp);
     if (result == "Infinity") {
