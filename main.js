@@ -129,9 +129,13 @@ function math(channel, user, message, args) {
 }
 
 function hug(channel, user, message, args) {
-  if (args[0].match(/^[a-zA-Z0-9_]{1,25}$/) !== null) {
-    return sendMessage(channel, `${user.username} hugs ${args[0]} <3`);
-  } else {
-    return sendMessage(channel, `${user.username}, that is not a valid username OMGScoots`);
+  try {
+    if (args[0].match(/^[a-zA-Z0-9_]{1,25}$/) !== null) {
+      return sendMessage(channel, `${user.username} hugs ${args[0]} <3`);
+    } else {
+      return sendMessage(channel, `${user.username}, that is not a valid username OMGScoots`);
+    }
+  } catch (e) {
+    return;
   }
 }
