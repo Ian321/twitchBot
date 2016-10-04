@@ -45,7 +45,8 @@ const commands = {
     '!node': node,
     '*gtfo': gtfo,
     '!sha512': sha512,
-    '*math': math
+    '*math': math,
+    '!hug': hug
 };
 
 // Message handler
@@ -124,5 +125,13 @@ function math(channel, user, message, args) {
     return sendMessage(channel, `${user.username}, ${result}`);
   } catch (e) {
     return sendMessage(channel, `${user.username}, invalid input OMGScoots`);
+  }
+}
+
+function hug(channel, user, message, args) {
+  if (args[0].match(/^[a-zA-Z0-9_]{1,25}$/) !== null) {
+    return sendMessage(channel, `${user.username} hugs ${args[0]} <3`);
+  } else {
+    return sendMessage(channel, `${user.username}, that is not a valid username OMGScoots`);
   }
 }
