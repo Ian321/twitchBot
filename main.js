@@ -120,7 +120,7 @@ function math(channel, user, message, args) {
   try {
     var result = mathjs.eval(tmp);
     if (result == "Infinity" || result == "-Infinity") {
-      result = `WutFace it's ${result} !`;
+      result = `WutFace it's '${result}'!`;
     }
     return sendMessage(channel, `${user.username}, ${result}`);
   } catch (e) {
