@@ -119,8 +119,8 @@ function math(channel, user, message, args) {
   var tmp = message.substr(message.indexOf(" ") + 1);
   try {
     var result = mathjs.eval(tmp);
-    if (result == "Infinity") {
-      result = "WutFace buffer overload!";
+    if (result == "Infinity" || result == "-Infinity") {
+      result = `WutFace it's ${result} !`;
     }
     return sendMessage(channel, `${user.username}, ${result}`);
   } catch (e) {
