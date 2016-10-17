@@ -8,7 +8,7 @@ const _ = require('lodash');
 const got = require('got');
 
 const lib = require('./lib.js');
-const conf = require('././config.json');
+const conf = require('./config.json');
 
 const options = {
     options: {
