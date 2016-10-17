@@ -26,10 +26,10 @@ const options = {
 
 const client = tmi.client(options);
 client.connect();
-const startTime = Date.now();
+var startTime = Date.now();
 const admins = conf.admins;
 
-const messages = [];
+var messages = [];
 
 setInterval(() => {
     if (messages.length > 0) {
@@ -46,7 +46,8 @@ const commands = {
     '*gtfo': gtfo,
     '!sha512': sha512,
     '*math': math,
-    '!hug': hug
+    '!hug': hug,
+    '*eval': myEval
 };
 
 // Message handler
@@ -142,5 +143,15 @@ function hug(channel, user, message, args) {
     }
   } else {
     return;
+  }
+}
+
+function myEval(channel, user, message, args) {
+  if (user.admin) {
+    try {
+      return sendMessage(channel, `${eval(args.join(" "))}`);
+    } catch (e) {
+      return sendMessage(channel, e);
+    }
   }
 }
