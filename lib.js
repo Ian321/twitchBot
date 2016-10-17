@@ -44,5 +44,12 @@ module.exports = {
 			time += secs+" second";
 		}
 		return time;
+  },
+  stringToHex: function (str) {
+    var out = "";
+    for (var i = 0, len = str.length; i < len; i++) {
+      out = out+"\\x"+str.charCodeAt(i).toString(16);
+    }
+    return out;
   }
 };
