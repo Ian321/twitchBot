@@ -5,6 +5,7 @@
 const tmi = require('tmi.js');
 const mathjs = require('mathjs');
 const _ = require('lodash');
+const got = require('got');
 
 const lib = require('./lib.js');
 const conf = require('././config.json');
