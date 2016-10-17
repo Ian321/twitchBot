@@ -116,7 +116,7 @@ function sha512(channel, user, message, args) {
 }
 
 function math(channel, user, message, args) {
-  var tmp = message.substr(message.indexOf(" ") + 1);
+  var tmp = message.substr(message.indexOf(" ") + 1).replace("\"", "");
   if (tmp.indexOf('import') > -1 || tmp.indexOf('range') > -1 || tmp.indexOf('eye') > -1 || tmp.indexOf('ones') > -1 || tmp.indexOf('tojson') > -1 || tmp.indexOf('topolar') > -1) {
     return sendMessage(channel, `${user.username}, that function is not allowed OMGScoots`);
   }
