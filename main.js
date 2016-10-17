@@ -122,6 +122,9 @@ function math(channel, user, message, args) {
   if (tmp.indexOf('import') > -1 || tmp.indexOf('range') > -1 || tmp.indexOf('eye') > -1 || tmp.indexOf('ones') > -1 || tmp.indexOf('tojson') > -1 || tmp.indexOf('topolar') > -1) {
     return sendMessage(channel, `${user.username}, that function is not allowed OMGScoots`);
   }
+  if (tmp.indexOf("\\")) {
+    return sendMessage(channel, `${user.username}, `+'\x66\x75\x63\x6b\x20\x79\x6f\x75 OMGScoots');
+  }
   try {
     var result = mathjs.eval(tmp);
     if (result == "Infinity" || result == "-Infinity") {
