@@ -124,8 +124,8 @@ function math(channel, user, message, args) {
     var result = mathjs.eval(tmp);
     if (result == "Infinity" || result == "-Infinity") {
       result = `WutFace it's '${result}'`;
-    } else if (result == "NaN") {
-      result = `NaM it's '${result}'`
+    } else if (result.toString() == "NaN") {
+      result = `NaM it's '${result}'`;
     }
     return sendMessage(channel, `${user.username}, ${result}`);
   } catch (e) {
