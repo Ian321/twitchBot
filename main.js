@@ -119,7 +119,7 @@ function sha512(channel, user, message, args) {
 
 function math(channel, user, message, args) {
   if (message.indexOf("\\")) {
-    return sendMessage(channel, `${user.username}, `+'\x66\x75\x63\x6b\x20\x79\x6f\x75 OMGScoots');
+    return sendMessage(channel, `${user.username}, `+"\\x66\\x75\\x63\\x6b\\x20\\x79\\x6f\\x75 OMGScoots");
   }
   var tmp = message.substr(message.indexOf(" ") + 1).split("\"").join("");
   if (tmp.indexOf('import') > -1 || tmp.indexOf('range') > -1 || tmp.indexOf('eye') > -1 || tmp.indexOf('ones') > -1 || tmp.indexOf('tojson') > -1 || tmp.indexOf('topolar') > -1) {
