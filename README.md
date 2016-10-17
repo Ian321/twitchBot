@@ -5,7 +5,8 @@
 <code>
 tmi.js  
 mathjs  
-lodash
+lodash  
+got  
 </code></p>
 
 <p>First you have to configure the bot with a <code>config.json</code></p>
