@@ -149,10 +149,10 @@ function math(channel, user, message, args) {
             resultE = true;
           }
         } catch (e) {
-        
+
         }
         if (!resultE) {
-          return sendMessage(channel, `${user.username}, can't check if prime WutFace`);
+          return sendMessage(channel, `${user.username}, can't check if it's a prime number WutFace`);
         } else {
           tmp = "isPrime("+resultP+")";
         }
