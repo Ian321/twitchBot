@@ -120,9 +120,43 @@ function sha512(channel, user, message, args) {
 function math(channel, user, message, args) {
   // escape strings
   var tmp = message.replace(/[\\$'"]/g, "\\$&");
-  var tmp = tmp.substr(message.indexOf(" ") + 1).split("\"").join("");
+  tmp = tmp.substr(message.indexOf(" ") + 1).split("\"").join("");
+  tmp = tmp.replace(/ /g, "");
   if (tmp.indexOf('import') > -1 || tmp.indexOf('range') > -1 || tmp.indexOf('eye') > -1 || tmp.indexOf('ones') > -1 || tmp.indexOf('tojson') > -1 || tmp.indexOf('topolar') > -1) {
     return sendMessage(channel, `${user.username}, that function is not allowed OMGScoots`);
+  }
+  if (tmp.indexOf('isPrime') > -1) {
+      var tmpP = tmp.split("isPrime(")[1];
+      if (tmp.split("isPrime(")[2]) {
+        return sendMessage(channel, `${user.username}, invalid input OMGScoots`);
+      } else {
+        var count = (tmpP.match(/\(/g) || []).length;
+        count++;
+        var rek = new RegExp("^(?:[^|\\)]*\\\)){"+count.toString()+"}([^|]*)", "gm");
+        var keepo = rek.exec(tmpP);
+        var pogchamp = keepo[0];
+        var vislaud = "";
+        keepo.shift();
+        for (var i = 0; i < keepo.length; i++) {
+          vislaud += keepo[i];
+        }
+        tmpP = "("+tmpP.replace(vislaud, "");
+        var resultE = false;
+        var resultP;
+        try {
+          resultP = mathjs.eval(tmpP);
+          if (!(resultP == "Infinity" || resultP == "-Infinity" || resultP.toString() == "NaN")) {
+            resultE = true;
+          }
+        } catch (e) {
+        
+        }
+        if (!resultE) {
+          return sendMessage(channel, `${user.username}, can't check if prime WutFace`);
+        } else {
+          tmp = "isPrime("+resultP+")";
+        }
+      }
   }
   try {
     var result = mathjs.eval(tmp);
