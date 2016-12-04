@@ -121,18 +121,22 @@ function math(channel, user, message, args) {
   // escape strings
   var tmp = message.replace(/[\\$'"]/g, "\\$&");
   tmp = tmp.substr(message.indexOf(" ") + 1).split("\"").join("");
-  tmp = tmp.replace(/ /g, "");
   if (tmp.indexOf('import') > -1 || tmp.indexOf('range') > -1 || tmp.indexOf('eye') > -1 ||
   tmp.indexOf('ones') > -1 || tmp.indexOf('tojson') > -1 || tmp.indexOf('topolar') > -1 || tmp.indexOf('zeros') > -1 || tmp.indexOf('distance') > -1) {
     return sendMessage(channel, `${user.username}, that function is not allowed OMGScoots`);
   }
   if (tmp.indexOf('isPrime') > -1) {
-      var tmpP = tmp.split("isPrime(")[1];
+      var tmpP = tmp.replace(/ /g, "").split("isPrime(")[1];
       if (tmp.split("isPrime(")[2]) {
         return sendMessage(channel, `${user.username}, invalid input OMGScoots`);
       } else {
-        var count = (tmpP.match(/\(/g) || []).length;
-        count++;
+        var count;
+        try {
+          count = (tmpP.match(/\(/g) || []).length;
+          count++;
+        } catch (e) {
+          return sendMessage(channel, `${user.username}, invalid input OMGScoots`);
+        }
         var rek = new RegExp("^(?:[^|\\)]*\\\)){"+count.toString()+"}([^|]*)", "gm");
         var keepo = rek.exec(tmpP);
         var pogchamp = keepo[0];
