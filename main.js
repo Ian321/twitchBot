@@ -129,6 +129,8 @@ function math(channel, user, message, args) {
       var tmpP = tmp.replace(/ /g, "").split("isPrime(")[1];
       if (tmp.split("isPrime(")[2]) {
         return sendMessage(channel, `${user.username}, invalid input OMGScoots`);
+      } else if ((tmp.match(/\(/g) || []).length != (tmp.match(/\)/g) || []).length) {
+        return sendMessage(channel, `${user.username}, invalid input OMGScoots`);
       } else {
         var count;
         try {
