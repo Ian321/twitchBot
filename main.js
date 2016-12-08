@@ -48,7 +48,8 @@ const commands = {
     '!sha512': sha512,
     '*math': math,
     '!hug': hug,
-    '*eval': myEval
+    '*eval': myEval,
+    '*version': version
 };
 
 // Message handler
@@ -198,4 +199,9 @@ function myEval(channel, user, message, args) {
       return sendMessage(channel, e);
     }
   }
+}
+
+function version(channel, user, message, args) {
+  var keepo = require('./package.json');
+  return sendMessage(channel, `${keepo.name} running on v${keepo.version} for ${lib.msToTimeSting(Date.now() - startTime)}`);
 }
