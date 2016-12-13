@@ -123,7 +123,8 @@ function math(channel, user, message, args) {
     var tmp = message.replace(/[\\$'"]/g, "\\$&");
     tmp = tmp.substr(message.indexOf(" ") + 1).split("\"").join("");
     if (tmp.indexOf('import') > -1 || tmp.indexOf('range') > -1 || tmp.indexOf('eye') > -1 ||
-        tmp.indexOf('ones') > -1 || tmp.indexOf('tojson') > -1 || tmp.indexOf('topolar') > -1 || tmp.indexOf('zeros') > -1 || tmp.indexOf('distance') > -1) {
+        tmp.indexOf('ones') > -1 || tmp.indexOf('tojson') > -1 || tmp.indexOf('topolar') > -1 || tmp.indexOf('zeros') > -1 || tmp.indexOf('distance') > -1 ||
+        tmp.indexOf('help') > -1) {
         return sendMessage(channel, `${user.username}, that function is not allowed OMGScoots`);
     }
     if (tmp.indexOf('isPrime') > -1) {

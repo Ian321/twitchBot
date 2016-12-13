@@ -1,6 +1,6 @@
 {
   "name": "ircbot",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "A Twitch Bot made in node.js",
   "main": "main.js",
   "scripts": {
