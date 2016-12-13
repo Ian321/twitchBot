@@ -175,9 +175,14 @@ function math(channel, user, message, args) {
             result = `NaM it's '${result}'`;
         }
         if (result.toString().indexOf('function') > -1) {
-            result = `looks like you didn't close the brackets for a function :)`;
+            result = `you don't wanna know what that function does ;p`;
         }
-        return sendMessage(channel, `${user.username}, ${result}`);
+        var tmpMess = `${user.username}, ${result}`;
+        if (tmpMess.length >= conf.messages.maxLength) {
+          return sendMessage(channel, `${user.username}, the result was too long WutFace`);
+        } else {
+          return sendMessage(channel, tmpMess);
+        }
     } catch (e) {
         return sendMessage(channel, `${user.username}, invalid input OMGScoots`);
     }

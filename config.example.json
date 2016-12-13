@@ -6,6 +6,7 @@
   ],
   "messages": {
     "join": "",
-    "leave": ""
+    "leave": "",
+    "maxLength": 350
   }
 }
