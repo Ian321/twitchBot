@@ -4,8 +4,14 @@
 */
 const tmi = require('tmi.js');
 const mathjs = require('mathjs');
-const _ = require('lodash');
 const got = require('got');
+
+const timezoneJS = require("timezone-js");
+const tzdata = require("tzdata");
+
+var _tz = timezoneJS.timezone;
+_tz.loadingScheme = _tz.loadingSchemes.MANUAL_LOAD;
+_tz.loadZoneDataFromObject(tzdata);
 
 const lib = require('./lib.js');
 const conf = require('./config.json');
@@ -39,7 +45,7 @@ setInterval(() => {
 }, 5000);
 
 // Map a command to a function
-const commands = {
+var commands = {
     '!say': say,
     '*ping': ping,
     '!list': list,
@@ -49,7 +55,8 @@ const commands = {
     '*math': math,
     '!hug': hug,
     '*eval': myEval,
-    '*version': version
+    '*version': version,
+    '!agdq': agdq
 };
 
 // Message handler
@@ -179,9 +186,9 @@ function math(channel, user, message, args) {
         }
         var tmpMess = `${user.username}, ${result}`;
         if (tmpMess.length >= conf.messages.maxLength) {
-          return sendMessage(channel, `${user.username}, the result was too long WutFace`);
+            return sendMessage(channel, `${user.username}, the result was too long WutFace`);
         } else {
-          return sendMessage(channel, tmpMess);
+            return sendMessage(channel, tmpMess);
         }
     } catch (e) {
         return sendMessage(channel, `${user.username}, invalid input OMGScoots`);
@@ -213,4 +220,33 @@ function myEval(channel, user, message, args) {
 function version(channel, user, message, args) {
     var keepo = require('./package.json');
     return sendMessage(channel, `${keepo.name} running on v${keepo.version} for ${lib.msToTimeSting(Date.now() - startTime)}`);
+}
+
+function agdq(channel, user, message, args) {
+    var message;
+    var emote;
+    var outTime;
+    var current = new timezoneJS.Date('America/Los_Angeles');
+    var start = new Date(2017, 0, 8, 17, 30);
+    var till = new Date(2017, 0, 15, 7, 15);
+    if (start.getTime() > current.getTime()) {
+        diff = start.getTime() - current.getTime();
+        outTime = lib.msToTimeSting(diff);
+        message = `AGDQ will start in ${outTime} PagChomp`;
+    } else if (till.getTime() > current.getTime()) {
+        return got('https://api.twitch.tv/kraken/channels/gamesdonequick', {
+            json: true,
+            headers: {
+                Accept: "application/vnd.twitchtv.v3+json"
+            }
+        }).then(res => {
+            console.log(res.body);
+            message = `AGDQ is live with "${res.body.game}" PagChomp`;
+            return sendMessage(channel, `${user.username}, ${message}`);
+        });
+    } else {
+        outTime = lib.msToTimeSting(diff);
+        message = `AGDQ ended FeelsBadMan`;
+    }
+    return sendMessage(channel, `${user.username}, ${message}`);
 }
