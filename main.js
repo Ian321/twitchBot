@@ -14,20 +14,24 @@ _tz.loadingScheme = _tz.loadingSchemes.MANUAL_LOAD;
 _tz.loadZoneDataFromObject(tzdata);
 
 const lib = require('./lib.js');
-const conf = require('./config.json');
+const conf = require('./config.json') || require('./config.example.json');
+
+var identity;
+if (conf.username && conf.password && conf.password != "" && conf.username != "") {
+  identity = {
+      username: conf.username,
+      password: conf.password
+  };
+}
 
 const options = {
     options: {
         debug: true
     },
     connection: {
-        cluster: "aws",
         reconnect: true
     },
-    identity: {
-        username: conf.username,
-        password: conf.password
-    },
+    identity,
     channels: ["#" + process.argv[2]]
 };
 
