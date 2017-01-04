@@ -1,4 +1,5 @@
 <div><h1 style="margin-bottom:0px;"> Twitch Bot <img alt="Kappa" src="https://i.nuuls.com/xfk-.png"></h1></div>
+[![CircleCI](https://circleci.com/gh/Ian321/twitchBot.svg?style=svg)](https://circleci.com/gh/Ian321/twitchBot)
 
 <p>First you have to configure the bot with a <code>config.json</code></p>
 <p style="margin-bottom:0px;">how to start:
