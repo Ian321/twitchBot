@@ -36,7 +36,15 @@ const options = {
 };
 
 const client = tmi.client(options);
-client.connect();
+function start() {
+  client.connect().catch(err => {
+    console.log(err.message);
+    setTimeout(() => {
+      start();
+    }, 1000 * 8);
+  });
+}
+start();
 var startTime = Date.now();
 const admins = conf.admins;
 

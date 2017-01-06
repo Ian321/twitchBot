@@ -16,7 +16,7 @@ const options = {
 const client = tmi.client(options);
 
 describe('Library', function() {
-  it('lib.msToTimeSting("Kappa 123") should return "4b6170706120313233"', function() {
+  it('lib.stringToHex("Kappa 123") should return "4b6170706120313233"', function() {
     expect(lib.stringToHex("Kappa 123").replace(/\\x/g, "")).to.equal("4b6170706120313233");
   });
   it('lib.msToTimeSting(<1000) should return ""', function() {
