@@ -4,7 +4,6 @@
 */
 const tmi = require('tmi.js');
 const mathjs = require('mathjs');
-const got = require('got');
 
 const timezoneJS = require("timezone-js");
 const tzdata = require("tzdata");
@@ -17,7 +16,7 @@ const lib = require('./lib.js');
 const conf = require('./config.json') || require('./config.example.json');
 
 var identity;
-if (conf.username && conf.password && conf.password != "" && conf.username != "") {
+if (conf.username && conf.password) {
     identity = {
         username: conf.username,
         password: conf.password
@@ -39,7 +38,7 @@ const client = tmi.client(options);
 
 function start() {
     client.connect().catch(err => {
-        console.log(err.message);
+        console.error(`ERROR: ${err.message}`);
         setTimeout(() => {
             start();
         }, 1000 * 8);
@@ -48,14 +47,6 @@ function start() {
 start();
 var startTime = Date.now();
 const admins = conf.admins;
-
-var messages = [];
-
-setInterval(() => {
-    if (messages.length > 0) {
-        client.say(channel, message);
-    }
-}, 5000);
 
 // Map a command to a function
 var commands = {
@@ -74,7 +65,9 @@ var commands = {
 
 // Message handler
 function sendMessage(channel, message) {
-    return client.say(channel, message + " ").catch(err => console.log('Message not send.'));
+    return client.say(channel, message + " ").catch(err => {
+        console.error(`ERROR: ${err.message}`);
+    });
 }
 
 client.on('chat', function (channel, user, message, self) {
@@ -85,7 +78,6 @@ client.on('chat', function (channel, user, message, self) {
         const command = match[1].toLowerCase();
         const args = match[2] ? match[2].trim().split(/\s+/) : [];
 
-        //console.log(command, args);
         if (commands.hasOwnProperty(command)) {
             channel = channel.substring(1);
             if (admins.includes(user.username)) {
@@ -100,12 +92,12 @@ client.on('chat', function (channel, user, message, self) {
 
 // Join / Leave
 client.on("join", function (channel, username, self) {
-    if (username === conf.username) {
+    if (self) {
         sendMessage(channel, conf.messages.join);
     }
 });
 
-function gtfo(channel, user, message, args) {
+function gtfo(channel, user) {
     if (user.admin) {
         return sendMessage(channel, conf.messages.leave) && process.exit(0);
     }
@@ -119,7 +111,7 @@ function say(channel, user, message, args) {
     }
 }
 
-function ping(channel, user, message, args) {
+function ping(channel) {
     return sendMessage(channel, "running for " + lib.msToTimeSting(Date.now() - startTime));
 }
 
@@ -130,7 +122,7 @@ function list(channel, user, message, args) {
     client.whisper(user.username, `https://tmi.twitch.tv/group/user/${channel}/chatters`);
 }
 
-function node(channel, user, message, args) {
+function node(channel) {
     return sendMessage(channel, "i run on node js FeelsGoodMan");
 }
 
@@ -138,7 +130,7 @@ function sha512(channel, user, message, args) {
     return sendMessage(channel, require('crypto').createHash('sha512').update(args.join(" ")).digest('hex'));
 }
 
-function math(channel, user, message, args) {
+function math(channel, user, message) {
     // escape strings
     var tmp = message.replace(/[\\$'"]/g, "\\$&");
     tmp = tmp.substr(message.indexOf(" ") + 1).split("\"").join("");
@@ -163,22 +155,21 @@ function math(channel, user, message, args) {
             }
             var rek = new RegExp("^(?:[^|\\)]*\\\)){" + count.toString() + "}([^|]*)", "gm");
             var keepo = rek.exec(tmpP);
-            var pogchamp = keepo[0];
             var vislaud = "";
             keepo.shift();
             for (var i = 0; i < keepo.length; i++) {
                 vislaud += keepo[i];
             }
             tmpP = "(" + tmpP.replace(vislaud, "");
-            var resultE = false;
+            var resultE = true;
             var resultP;
             try {
                 resultP = mathjs.eval(tmpP);
-                if (!(resultP == "Infinity" || resultP == "-Infinity" || resultP.toString() == "NaN")) {
-                    resultE = true;
+                if (resultP == "Infinity" || resultP == "-Infinity" || resultP.toString() == "NaN") {
+                    resultE = false;
                 }
             } catch (e) {
-
+                resultE = false;
             }
             if (!resultE) {
                 return sendMessage(channel, `${user.username}, can't check if it's a prime number WutFace`);
@@ -230,57 +221,28 @@ function myEval(channel, user, message, args) {
     }
 }
 
-function version(channel, user, message, args) {
+function version(channel) {
     const keepo = require('./package.json');
     return sendMessage(channel, `${keepo.name} running on v${keepo.version} for ${lib.msToTimeSting(Date.now() - startTime)}`);
 }
 
-function agdq(channel, user, message, args) {
+function agdq(channel, user) {
     const current = new timezoneJS.Date('America/Los_Angeles');
     const start = new Date(2017, 0, 8, 17, 30);
     const till = new Date(2017, 0, 15, 7, 15);
     if (start.getTime() > current.getTime()) {
         return sendMessage(channel, `${user.username}, AGDQ will start in ${lib.msToTimeSting(start.getTime() - current.getTime())} PagChomp`);
     } else if (till.getTime() > current.getTime()) {
-        return getUser.id("gamesdonequick").then(id => {
-            getUser.data(id).then(data => {
+        return lib.getUser.id("gamesdonequick").then(id => {
+            lib.getUser.data(id).then(data => {
                 return sendMessage(channel, `${user.username}, AGDQ is live with "${data.game}" PagChomp`);
             }).catch(err => {
-                return false;
+                return err;
             });
         }).catch(err => {
-            return false;
+            return err;
         });
     } else {
         return sendMessage(channel, `${user.username}, AGDQ ended FeelsBadMan`);
     }
 }
-
-const getUser = {
-    id: function(name) {
-        return got.get(`https://api.twitch.tv/kraken/users?login=${name}`, {
-            json: true,
-            headers: {
-                Accept: "application/vnd.twitchtv.v5+json"
-            }
-        }).then(res => {
-            return res.body.users[0]._id;
-        }).catch(err => {
-            console.error(`Could not get id for '${name}'`);
-            return err;
-        });
-    },
-    data: function(id) {
-        return got.get(`https://api.twitch.tv/kraken/channels/${id}`, {
-            json: true,
-            headers: {
-                Accept: "application/vnd.twitchtv.v5+json"
-            }
-        }).then(res => {
-            return res.body;
-        }).catch(err => {
-            console.error(`Could not get date for '${id}'`);
-            return err;
-        });
-    }
-};

@@ -64,3 +64,20 @@ describe('MATH', function() {
     });
   });
 });
+
+describe('Twitch API', function() {
+  describe('Get ID by username', function() {
+    it('nuuls => 100229878', function () {
+      lib.getUser.id("nuuls").then(id => {
+          expect(id).to.eql("100229878");
+      });
+    });
+  });
+  describe('Get data by id', function() {
+    it('100229878 => nuuls', function () {
+      lib.getUser.data("100229878").then(data => {
+          expect(data.created_at).to.eql("2015-08-22T13:43:40Z");
+      });
+    });
+  });
+});

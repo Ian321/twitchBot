@@ -1,15 +1,17 @@
 /*
   Custom library
 */
+const got = require('got');
+
 module.exports = {
   msToTimeSting: function (ms) {
     // This functions converts ms to a human friendly string.
-    sec = Math.floor(ms / 1000);
-    days = Math.floor(sec / 86400);
-		hours= Math.floor(sec / 3600 % 60 % 60 % 24);
-		mins = Math.floor(sec / 60 % 60);
-		secs = Math.floor(sec % 60);
-		time = "";
+    var sec = Math.floor(ms / 1000);
+    var days = Math.floor(sec / 86400);
+		var hours= Math.floor(sec / 3600 % 60 % 60 % 24);
+		var mins = Math.floor(sec / 60 % 60);
+		var secs = Math.floor(sec % 60);
+		var time = "";
 		if (days >= 2) {
 			time += days+" days";
 		} else if (days >= 1) {
@@ -51,5 +53,33 @@ module.exports = {
       out = out+"\\x"+str.charCodeAt(i).toString(16);
     }
     return out;
-  }
+  },
+	getUser: {
+			id: function(name) {
+					return got.get(`https://api.twitch.tv/kraken/users?login=${name}`, {
+							json: true,
+							headers: {
+									Accept: "application/vnd.twitchtv.v5+json"
+							}
+					}).then(res => {
+							return res.body.users[0]._id;
+					}).catch(err => {
+							console.error(`Could not get id for '${name}'`);
+							return err;
+					});
+			},
+			data: function(id) {
+					return got.get(`https://api.twitch.tv/kraken/channels/${id}`, {
+							json: true,
+							headers: {
+									Accept: "application/vnd.twitchtv.v5+json"
+							}
+					}).then(res => {
+							return res.body;
+					}).catch(err => {
+							console.error(`Could not get date for '${id}'`);
+							return err;
+					});
+			}
+	}
 };
