@@ -137,21 +137,21 @@ function math(channel, user, message) {
     if (tmp.indexOf('import') > -1 || tmp.indexOf('range') > -1 || tmp.indexOf('eye') > -1 ||
         tmp.indexOf('ones') > -1 || tmp.indexOf('tojson') > -1 || tmp.indexOf('topolar') > -1 || tmp.indexOf('zeros') > -1 || tmp.indexOf('distance') > -1 ||
         tmp.indexOf('help') > -1) {
-        return sendMessage(channel, `${user.username}, that function is not allowed OMGScoots`);
+        return sendMessage(channel, `${user.username}, that function is not allowed ariW`);
     }
     if (tmp.indexOf('isPrime') > -1) {
         var tmpP = tmp.replace(/ /g, "").split("isPrime(")[1];
         if (tmp.split("isPrime(")[2]) {
-            return sendMessage(channel, `${user.username}, invalid input OMGScoots`);
+            return sendMessage(channel, `${user.username}, invalid input ariW`);
         } else if ((tmp.match(/\(/g) || []).length != (tmp.match(/\)/g) || []).length) {
-            return sendMessage(channel, `${user.username}, invalid input OMGScoots`);
+            return sendMessage(channel, `${user.username}, invalid input ariW`);
         } else {
             var count;
             try {
                 count = (tmpP.match(/\(/g) || []).length;
                 count++;
             } catch (e) {
-                return sendMessage(channel, `${user.username}, invalid input OMGScoots`);
+                return sendMessage(channel, `${user.username}, invalid input ariW`);
             }
             var rek = new RegExp("^(?:[^|\\)]*\\\)){" + count.toString() + "}([^|]*)", "gm");
             var keepo = rek.exec(tmpP);
@@ -195,7 +195,7 @@ function math(channel, user, message) {
             return sendMessage(channel, tmpMess);
         }
     } catch (e) {
-        return sendMessage(channel, `${user.username}, invalid input OMGScoots`);
+        return sendMessage(channel, `${user.username}, invalid input ariW`);
     }
 }
 
@@ -204,7 +204,7 @@ function hug(channel, user, message, args) {
         if (/^[a-zA-Z0-9_]{1,25}$/.test(args[0])) {
             return sendMessage(channel, `${user.username} hugs ${args[0]} <3`);
         } else {
-            return sendMessage(channel, `${user.username}, that is not a valid username OMGScoots`);
+            return sendMessage(channel, `${user.username}, that is not a valid username ariW`);
         }
     } else {
         return;
