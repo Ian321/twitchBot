@@ -36,15 +36,15 @@ const options = {
 
 const client = tmi.client(options);
 
-function start() {
+function _start() {
     client.connect().catch(err => {
         console.error(`ERROR: ${err.message}`);
         setTimeout(() => {
-            start();
+            _start();
         }, 1000 * 8);
     });
 }
-start();
+_start();
 var startTime = Date.now();
 const admins = conf.admins;
 
@@ -60,7 +60,9 @@ var commands = {
     '!hug': hug,
     '*eval': myEval,
     '*version': version,
-    '!agdq': agdq
+    '!agdq': agdq,
+    '!sgdq': agdq,
+    '!gdq': agdq
 };
 
 // Message handler
@@ -227,15 +229,25 @@ function version(channel) {
 }
 
 function agdq(channel, user) {
-    const current = new timezoneJS.Date('America/Los_Angeles');
-    const start = new Date(2017, 0, 8, 17, 30);
-    const till = new Date(2017, 0, 15, 7, 15);
-    if (start.getTime() > current.getTime()) {
-        return sendMessage(channel, `${user.username}, AGDQ will start in ${lib.msToTimeSting(start.getTime() - current.getTime())} PagChomp`);
-    } else if (till.getTime() > current.getTime()) {
+    const now = new timezoneJS.Date('America/Los_Angeles');
+
+    const E = "SGDQ";
+
+    // Gonna make this better soon™
+    const events = {
+        "SGDQ": {
+            _this: "SGDQ",
+            start: new Date(2017, 6, 2, 17, 30),
+            till: new Date(2017, 6, 9, 7, 15)
+        }
+    };
+
+    if (events[E].start.getTime() > now.getTime()) {
+        return sendMessage(channel, `${user.username}, ${events[E]._this} will start in ${lib.msToTimeSting(events[E].start.getTime() - now.getTime())} PagChomp`);
+    } else if (events[E].till.getTime() > now.getTime()) {
         return lib.getUser.id("gamesdonequick").then(id => {
             lib.getUser.data(id).then(data => {
-                return sendMessage(channel, `${user.username}, AGDQ is live with "${data.game}" PagChomp`);
+                return sendMessage(channel, `${user.username}, ${events[E]._this} is live with "${data.game}" PagChomp`);
             }).catch(err => {
                 return err;
             });
@@ -243,6 +255,6 @@ function agdq(channel, user) {
             return err;
         });
     } else {
-        return sendMessage(channel, `${user.username}, AGDQ ended FeelsBadMan`);
+        return sendMessage(channel, `${user.username}, ${events[E]._this} ended FeelsBadMan`);
     }
 }
