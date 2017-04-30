@@ -52,6 +52,7 @@ const admins = conf.admins;
 var commands = {
     '!say': say,
     '*ping': ping,
+    '!pingall': ping,
     '!list': list,
     '!node': node,
     '*gtfo': gtfo,
