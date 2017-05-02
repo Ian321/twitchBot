@@ -67,8 +67,16 @@ var commands = {
 };
 
 // Message handler
+var curr = 0;
 function sendMessage(channel, message) {
-    return client.say(channel, message + " ").catch(err => {
+    var padding = "";
+    if (curr === 1) {
+        curr = 0;
+        padding = "\u206D";
+    } else {
+        curr = 1;
+    }
+    return client.say(channel, message + padding).catch(err => {
         console.error(`ERROR: ${err.message}`);
     });
 }
