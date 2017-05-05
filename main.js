@@ -72,7 +72,7 @@ function sendMessage(channel, message) {
     var padding = "";
     if (curr === 1) {
         curr = 0;
-        padding = "\u206D";
+        padding = " \u206D";
     } else {
         curr = 1;
     }
@@ -82,23 +82,30 @@ function sendMessage(channel, message) {
 }
 
 client.on('chat', function (channel, user, message, self) {
-    if (self) return;
+    setTimeout(function() {
+        if (self) return;
 
-    const match = message.match(/(.[a-zA-Z0-9_-]+)(?:\s+(.*))?/);
-    if (match !== null) {
-        const command = match[1].toLowerCase();
-        const args = match[2] ? match[2].trim().split(/\s+/) : [];
+        const match = message.match(/(.[a-zA-Z0-9_-]+)(?:\s+(.*))?/);
+        if (match !== null) {
+            const command = match[1].toLowerCase();
+            const args = match[2] ? match[2].trim().split(/\s+/) : [];
 
-        if (commands.hasOwnProperty(command)) {
-            channel = channel.substring(1);
-            if (admins.includes(user.username)) {
-                user.admin = true;
-            } else {
-                user.admin = false;
+            if (commands.hasOwnProperty(command)) {
+                channel = channel.substring(1);
+                if (admins.includes(user.username)) {
+                    user.admin = true;
+                } else {
+                    user.admin = false;
+                }
+                message = message.replace(/\u{206d}/ug, "");
+                var args2 = [];
+                for (let i = 0; i < args.length; i++) {
+                    args2.push(args[i].replace(/\u{206d}/ug, ""));
+                }
+                commands[command](channel, user, message, args2);
             }
-            commands[command](channel, user, message, args);
         }
-    }
+    }, 10);
 });
 
 // Join / Leave
@@ -182,7 +189,7 @@ function math(channel, user, message) {
             } catch (e) {
                 resultE = false;
             }
-            if (!resultE) {
+            if (!resultE || resultP.toString().length >= 15) {
                 return sendMessage(channel, `${user.username}, can't check if it's a prime number WutFace`);
             } else {
                 tmp = "isPrime(" + resultP + ")";

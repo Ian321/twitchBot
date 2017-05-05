@@ -1,6 +1,6 @@
 {
   "name": "twitchbot",
-  "version": "1.6.6",
+  "version": "1.6.7",
   "description": "A Twitch Bot made in node.js",
   "main": "main.js",
   "scripts": {
