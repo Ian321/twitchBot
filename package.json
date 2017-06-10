@@ -1,6 +1,6 @@
 {
   "name": "twitchbot",
-  "version": "1.6.7",
+  "version": "1.6.8",
   "description": "A Twitch Bot made in node.js",
   "main": "main.js",
   "scripts": {
@@ -9,13 +9,14 @@
   "author": "https://github.com/ian321",
   "license": "MIT",
   "dependencies": {
-    "got": "^6.7.1",
-    "mathjs": "^3.12.2",
+    "got": "^7.0.0",
+    "mathjs": "^3.13.3",
+    "nedb": "^1.8.0",
     "timezone-js": "^0.4.13",
-    "tmi.js": "^1.2.0",
+    "tmi.js": "^1.2.1",
     "tzdata": "^1.0.7"
   },
   "devDependencies": {
-    "chai": "^3.5.0"
+    "chai": "^4.0.2"
   }
 }

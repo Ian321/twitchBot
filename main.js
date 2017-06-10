@@ -4,6 +4,8 @@
 */
 const tmi = require('tmi.js');
 const mathjs = require('mathjs');
+const Datastore = require('nedb')
+const db = new Datastore({ filename: 'commands', autoload: true });
 
 const timezoneJS = require("timezone-js");
 const tzdata = require("tzdata");
@@ -23,6 +25,9 @@ if (conf.username && conf.password) {
     };
 }
 
+var joinThem = process.argv.slice();
+joinThem.splice(0, 2);
+
 const options = {
     options: {
         debug: true
@@ -31,7 +36,7 @@ const options = {
         reconnect: true
     },
     identity,
-    channels: ["#" + process.argv[2]]
+    channels: joinThem
 };
 
 const client = tmi.client(options);
@@ -61,10 +66,27 @@ var commands = {
     '!hug': hug,
     '*eval': myEval,
     '*version': version,
+    '*cmd': cmd,
     '!agdq': agdq,
     '!sgdq': agdq,
     '!gdq': agdq
 };
+
+db.find({}, (err, docs) => {
+    if (err) {
+        console.error(err);
+    }
+    for (let i = 0; i < docs.length; i++) {
+        /*eslint-disable no-unused-vars*/
+        commands[docs[i].trigger] = function(channel, user, message, args) {
+            try {
+                sendMessage(channel, eval("`" + docs[i].command + "`"));
+            } catch (err) {
+                sendMessage(channel, err.message + " WutFace");
+            }
+        }
+    }
+});
 
 // Message handler
 var curr = 0;
@@ -272,5 +294,93 @@ function agdq(channel, user) {
         });
     } else {
         return sendMessage(channel, `${user.username}, ${events[E]._this} ended FeelsBadMan`);
+    }
+}
+
+function cmd(channel, user, message, args) {
+    if (user.admin) {
+        if (args.length > 1) {
+            switch (args[0]) {
+                case "rm":
+                case "remove":
+                    db.remove({ trigger: args[1] }, {}, (err, numRem) => {
+                        if (err) {
+                            sendMessage(channel, user.username + `, ${err.message} WutFace`);
+                        } else if (numRem === 0) {
+                            sendMessage(channel, user.username + `, no command with trigger "${args[1]}" found`);
+                        } else {
+                            delete commands[args[1]];
+                            sendMessage(channel, user.username + `, successfully removed command "${args[1]}"`);
+                        }
+                    });
+                    break;
+                case "add":
+                    db.findOne({ trigger: args[1] }, (err, doc) => {
+                        if (err) {
+                            sendMessage(channel, user.username + `, ${err.message} WutFace`);
+                        } else if (doc) {
+                            sendMessage(channel, user.username + `, command with the trigger "${args[1]}" already exists`);
+                        } else {
+                            var tmp1 = args.slice();
+                            tmp1.splice(0, 2);
+                            db.insert({ trigger: args[1], command: tmp1.join(" ") }, (err2) => {
+                                if (err2) {
+                                    sendMessage(channel, user.username + `, ${err2.message} WutFace`);
+                                } else {
+                                    /*eslint-disable no-unused-vars*/
+                                    commands[args[1]] = function(channel, user, message, args) {
+                                        try {
+                                            sendMessage(channel, eval("`" + tmp1.join(" ") + "`"));
+                                        } catch (err3) {
+                                            sendMessage(channel, err3.message + " WutFace");
+                                        }
+                                    }
+                                    sendMessage(channel, user.username + `, successfully added command "${args[1]}"`);
+                                }
+                            });
+                        }
+                    });
+                    break;
+                case "edit":
+                case "update":
+                    db.findOne({ trigger: args[1] }, (err, doc) => {
+                        if (err) {
+                            sendMessage(channel, user.username + `, ${err.message} WutFace`);
+                        } else if (!doc) {
+                            sendMessage(channel, user.username + `, no command with trigger "${args[1]}" found`);
+                        } else {
+                            var tmp1 = args.slice();
+                            tmp1.splice(0, 2);
+                            db.update({ trigger: args[1] }, { $set: { command: tmp1.join(" ") } }, {}, (err2) => {
+                                if (err2) {
+                                    sendMessage(channel, user.username + `, ${err2.message} WutFace`);
+                                } else {
+                                    commands[args[1]] = function(channel, user, message, args) {
+                                        try {
+                                            sendMessage(channel, eval("`" + tmp1.join(" ") + "`"));
+                                        } catch (err3) {
+                                            sendMessage(channel, err3.message + " WutFace");
+                                        }
+                                    }
+                                    sendMessage(channel, user.username + `, successfully updated command "${args[1]}"`);
+                                }
+                            });
+                        }
+                    });
+                    break;
+                case "info":
+                case "show":
+                    db.findOne({ trigger: args[1] }, (err, doc) => {
+                        if (err) {
+                            sendMessage(channel, user.username + `, ${err.message} WutFace`);
+                        } else if (!doc) {
+                            sendMessage(channel, user.username + `, no command with trigger "${args[1]}" found`);
+                        } else {
+                            sendMessage(channel, user.username + `, "${args[1]}": ${doc.command}`);
+                        }
+                    });
+                    break;
+            }
+        }
     }
 }
