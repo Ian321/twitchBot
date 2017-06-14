@@ -89,8 +89,27 @@ db.find({}, (err, docs) => {
 });
 
 // Message handler
+var messageQ = [];
+setInterval(function() {
+    if (messageQ.length > 0) {
+        let x = messageQ.shift();
+        _sendMessage(x.channel, x.message);
+    }
+    if (messageQ.length > 9) {
+        messageQ = [messageQ[0]];
+    }
+}, (30 * 999 / 20));
 var curr = 0;
-function sendMessage(channel, message) {
+var lastMessage = new Date().getTime();
+function sendMessage(channel, message, skipQ = false) {
+    if (new Date().getTime() - lastMessage >= 1000 * 1.5 || skipQ) {
+        _sendMessage(channel, message);
+    } else {
+        messageQ.push({channel, message});
+    }
+    lastMessage = new Date().getTime();
+}
+function _sendMessage(channel, message) {
     var padding = "";
     if (curr === 1) {
         curr = 0;
@@ -254,9 +273,9 @@ function hug(channel, user, message, args) {
 function myEval(channel, user, message, args) {
     if (user.admin) {
         try {
-            return sendMessage(channel, `${eval(args.join(" "))}`);
+            return sendMessage(channel, `${eval(args.join(" "))}`, true);
         } catch (e) {
-            return sendMessage(channel, e);
+            return sendMessage(channel, e, true);
         }
     }
 }
@@ -305,37 +324,37 @@ function cmd(channel, user, message, args) {
                 case "remove":
                     db.remove({ trigger: args[1] }, {}, (err, numRem) => {
                         if (err) {
-                            sendMessage(channel, user.username + `, ${err.message} WutFace`);
+                            sendMessage(channel, user.username + `, ${err.message} WutFace`, true);
                         } else if (numRem === 0) {
-                            sendMessage(channel, user.username + `, no command with trigger "${args[1]}" found`);
+                            sendMessage(channel, user.username + `, no command with trigger "${args[1]}" found`, true);
                         } else {
                             delete commands[args[1]];
-                            sendMessage(channel, user.username + `, successfully removed command "${args[1]}"`);
+                            sendMessage(channel, user.username + `, successfully removed command "${args[1]}"`, true);
                         }
                     });
                     break;
                 case "add":
                     db.findOne({ trigger: args[1] }, (err, doc) => {
                         if (err) {
-                            sendMessage(channel, user.username + `, ${err.message} WutFace`);
+                            sendMessage(channel, user.username + `, ${err.message} WutFace`, true);
                         } else if (doc) {
-                            sendMessage(channel, user.username + `, command with the trigger "${args[1]}" already exists`);
+                            sendMessage(channel, user.username + `, command with the trigger "${args[1]}" already exists`, true);
                         } else {
                             var tmp1 = args.slice();
                             tmp1.splice(0, 2);
                             db.insert({ trigger: args[1], command: tmp1.join(" ") }, (err2) => {
                                 if (err2) {
-                                    sendMessage(channel, user.username + `, ${err2.message} WutFace`);
+                                    sendMessage(channel, user.username + `, ${err2.message} WutFace`, true);
                                 } else {
                                     /*eslint-disable no-unused-vars*/
                                     commands[args[1]] = function(channel, user, message, args) {
                                         try {
-                                            sendMessage(channel, eval("`" + tmp1.join(" ") + "`"));
+                                            sendMessage(channel, eval("`" + tmp1.join(" ") + "`"), true);
                                         } catch (err3) {
-                                            sendMessage(channel, err3.message + " WutFace");
+                                            sendMessage(channel, err3.message + " WutFace", true);
                                         }
                                     }
-                                    sendMessage(channel, user.username + `, successfully added command "${args[1]}"`);
+                                    sendMessage(channel, user.username + `, successfully added command "${args[1]}"`, true);
                                 }
                             });
                         }
@@ -345,24 +364,24 @@ function cmd(channel, user, message, args) {
                 case "update":
                     db.findOne({ trigger: args[1] }, (err, doc) => {
                         if (err) {
-                            sendMessage(channel, user.username + `, ${err.message} WutFace`);
+                            sendMessage(channel, user.username + `, ${err.message} WutFace`, true);
                         } else if (!doc) {
-                            sendMessage(channel, user.username + `, no command with trigger "${args[1]}" found`);
+                            sendMessage(channel, user.username + `, no command with trigger "${args[1]}" found`, true);
                         } else {
                             var tmp1 = args.slice();
                             tmp1.splice(0, 2);
                             db.update({ trigger: args[1] }, { $set: { command: tmp1.join(" ") } }, {}, (err2) => {
                                 if (err2) {
-                                    sendMessage(channel, user.username + `, ${err2.message} WutFace`);
+                                    sendMessage(channel, user.username + `, ${err2.message} WutFace`, true);
                                 } else {
                                     commands[args[1]] = function(channel, user, message, args) {
                                         try {
-                                            sendMessage(channel, eval("`" + tmp1.join(" ") + "`"));
+                                            sendMessage(channel, eval("`" + tmp1.join(" ") + "`"), true);
                                         } catch (err3) {
-                                            sendMessage(channel, err3.message + " WutFace");
+                                            sendMessage(channel, err3.message + " WutFace", true);
                                         }
                                     }
-                                    sendMessage(channel, user.username + `, successfully updated command "${args[1]}"`);
+                                    sendMessage(channel, user.username + `, successfully updated command "${args[1]}"`, true);
                                 }
                             });
                         }
@@ -372,11 +391,11 @@ function cmd(channel, user, message, args) {
                 case "show":
                     db.findOne({ trigger: args[1] }, (err, doc) => {
                         if (err) {
-                            sendMessage(channel, user.username + `, ${err.message} WutFace`);
+                            sendMessage(channel, user.username + `, ${err.message} WutFace`, true);
                         } else if (!doc) {
-                            sendMessage(channel, user.username + `, no command with trigger "${args[1]}" found`);
+                            sendMessage(channel, user.username + `, no command with trigger "${args[1]}" found`, true);
                         } else {
-                            sendMessage(channel, user.username + `, "${args[1]}": ${doc.command}`);
+                            sendMessage(channel, user.username + `, "${args[1]}": ${doc.command}`, true);
                         }
                     });
                     break;
