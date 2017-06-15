@@ -102,7 +102,7 @@ setInterval(function() {
 var curr = 0;
 var lastMessage = new Date().getTime();
 function sendMessage(channel, message, skipQ = false) {
-    if (new Date().getTime() - lastMessage >= 1000 * 1.5 || skipQ) {
+    if (new Date().getTime() - lastMessage >= 1000 * 2 || skipQ) {
         _sendMessage(channel, message);
     } else {
         messageQ.push({channel, message});
