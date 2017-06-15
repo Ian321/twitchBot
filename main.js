@@ -171,7 +171,7 @@ function say(channel, user, message, args) {
 }
 
 function ping(channel) {
-    return sendMessage(channel, "running for " + lib.msToTimeSting(Date.now() - startTime));
+    return sendMessage(channel, "running for " + lib.msToTimeString(Date.now() - startTime));
 }
 
 function list(channel, user, message, args) {
@@ -282,7 +282,7 @@ function myEval(channel, user, message, args) {
 
 function version(channel) {
     const keepo = require('./package.json');
-    return sendMessage(channel, `${keepo.name} running on v${keepo.version} for ${lib.msToTimeSting(Date.now() - startTime)}`);
+    return sendMessage(channel, `${keepo.name} running on v${keepo.version} for ${lib.msToTimeString(Date.now() - startTime)}`);
 }
 
 function agdq(channel, user) {
@@ -300,7 +300,7 @@ function agdq(channel, user) {
     };
 
     if (events[E].start.getTime() > now.getTime()) {
-        return sendMessage(channel, `${user.username}, ${events[E]._this} will start in ${lib.msToTimeSting(events[E].start.getTime() - now.getTime())} PagChomp`);
+        return sendMessage(channel, `${user.username}, ${events[E]._this} will start in ${lib.msToTimeString(events[E].start.getTime() - now.getTime())} PagChomp`);
     } else if (events[E].till.getTime() > now.getTime()) {
         return lib.getUser.id("gamesdonequick").then(id => {
             lib.getUser.data(id).then(data => {

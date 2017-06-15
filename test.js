@@ -19,13 +19,13 @@ describe('Library', function() {
   it('lib.stringToHex("Kappa 123") should return "4b6170706120313233"', function() {
     expect(lib.stringToHex("Kappa 123").replace(/\\x/g, "")).to.equal("4b6170706120313233");
   });
-  it('lib.msToTimeSting(<1000) should return ""', function() {
-    expect(lib.msToTimeSting(1)).to.equal("");
-    expect(lib.msToTimeSting(500)).to.equal("");
-    expect(lib.msToTimeSting(999)).to.equal("");
+  it('lib.msToTimeString(<1000) should return ""', function() {
+    expect(lib.msToTimeString(1)).to.equal("");
+    expect(lib.msToTimeString(500)).to.equal("");
+    expect(lib.msToTimeString(999)).to.equal("");
   });
-  it('lib.msToTimeSting(1000) should return "1 second"', function() {
-    expect(lib.msToTimeSting(1000)).to.equal("1 second");
+  it('lib.msToTimeString(1000) should return "1 second"', function() {
+    expect(lib.msToTimeString(1000)).to.equal("1 second");
   });
 });
 
