@@ -1,7 +1,8 @@
-<div><h1 style="margin-bottom:0px;"> Twitch Bot <img alt="Kappa" src="https://i.nuuls.com/xfk-.png"></h1></div>
-[![CircleCI](https://circleci.com/gh/Ian321/twitchBot.svg?style=svg)](https://circleci.com/gh/Ian321/twitchBot)
+# Twitch Bot ![Kappa](https://i.nuuls.com/xfk-.png)
 
-<p>First you have to configure the bot with a <code>config.json</code></p>
+[![CircleCI](https://circleci.com/gh/Ian321/twitchBot.svg)](https://circleci.com/gh/Ian321/twitchBot)
+
+First you have to configure the bot with a `config.json`
 <p style="margin-bottom:0px;">how to start:
 <code>node main.js channel</code></p>
 
