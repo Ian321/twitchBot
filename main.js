@@ -286,34 +286,18 @@ function version(channel) {
 }
 
 function agdq(channel, user) {
-    const now = new timezoneJS.Date('America/Los_Angeles');
-
-    const E = "SGDQ";
-
-    // Gonna make this better soon™
-    const events = {
-        "SGDQ": {
-            _this: "SGDQ",
-            start: new Date(2017, 6, 2, 17, 30),
-            till: new Date(2017, 6, 9, 7, 15)
-        }
-    };
-
-    if (events[E].start.getTime() > now.getTime()) {
-        return sendMessage(channel, `${user.username}, ${events[E]._this} will start in ${lib.msToTimeString(events[E].start.getTime() - now.getTime())} PagChomp`);
-    } else if (events[E].till.getTime() > now.getTime()) {
-        return lib.getUser.id("gamesdonequick").then(id => {
-            lib.getUser.data(id).then(data => {
-                return sendMessage(channel, `${user.username}, ${events[E]._this} is live with "${data.game}" PagChomp`);
-            }).catch(err => {
-                return err;
-            });
+    return lib.getUser.id("gamesdonequick").then(id => {
+        lib.getUser.data(id).then(data => {
+            if (data.stream.stream_type === "live") {
+                return sendMessage(channel, `${user.username}, GDQ is live with "${data.stream.game}" PagChomp`);
+            }
+            return sendMessage(channel, `${user.username}, GDQ is offline FeelsBadMan`);
         }).catch(err => {
             return err;
         });
-    } else {
-        return sendMessage(channel, `${user.username}, ${events[E]._this} ended FeelsBadMan`);
-    }
+    }).catch(err => {
+        return err;
+    });
 }
 
 function cmd(channel, user, message, args) {

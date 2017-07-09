@@ -70,7 +70,7 @@ const getUser =  {
 		});
 	},
 	data: function (id) {
-		return got.get(`https://api.twitch.tv/kraken/channels/${id}`, {
+		return got.get(`https://api.twitch.tv/kraken/streams/${id}`, {
 			json: true,
 			headers: {
 				Accept: "application/vnd.twitchtv.v5+json",
