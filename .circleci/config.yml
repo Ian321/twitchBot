@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: circleci/node:latest
     working_directory: ~/twitchBot
-    stepst:
+    steps:
       - checkout
       - restore_cache:
         key: dependency-cache-{{ checksum "package.json" }}
