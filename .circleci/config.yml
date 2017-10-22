@@ -3,3 +3,18 @@ jobs:
   build:
     docker:
       - image: circleci/node:latest
+    working_directory: ~/twitchBot
+    stepst:
+      - checkout
+      - restore_cache:
+        key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+        name: install-dependencys
+        command: npm install
+      - save_cache:
+        key: dependency-cache-{{ checksum "package.json" }}
+        paths:
+          - ./node_modules
+      - run:
+        name: test
+        command: npm test
