@@ -4,19 +4,20 @@
   "description": "A Twitch Bot made in node.js",
   "main": "main.js",
   "scripts": {
-    "test": "cp config.example.json config.json && mocha"
+    "test": "cp config.example.json config.json && mocha --exit"
   },
   "author": "https://github.com/ian321",
   "license": "MIT",
   "dependencies": {
     "got": "^7.1.0",
-    "mathjs": "^3.16.4",
+    "mathjs": "^3.16.5",
     "nedb": "^1.8.0",
     "timezone-js": "^0.4.13",
     "tmi.js": "^1.2.1",
     "tzdata": "^1.0.7"
   },
   "devDependencies": {
-    "chai": "^4.1.2"
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1"
   }
 }
