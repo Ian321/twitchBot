@@ -35,10 +35,14 @@ describe('TMI.js', () => {
     client.connect().catch(err => {
       expect(err).to.equal(undefined);
     });
-    client.disconnect();
+    client.disconnect().catch(err => {
+      expect(err).to.equal(undefined);
+    });
   });
   it('Test disconnect', () => {
-    client.connect();
+    client.connect().catch(err => {
+      expect(err).to.equal(undefined);
+    });
     client.disconnect().catch(err => {
       expect(err).to.equal(undefined);
     });
@@ -75,8 +79,8 @@ describe('Twitch API', () => {
   });
   describe('Get data by id', () => {
     it('100229878 => nuuls', async () => {
-      const data = lib.getUser.data('100229878');
-      expect(data.created_at).to.eql('2015-08-22T13:43:40Z');
+      const data = await lib.getUser.data('100229878');
+      expect(data.stream.channel.name).to.eql('nuuls');
     });
   });
 });
