@@ -4,7 +4,7 @@
   "description": "A Twitch Bot made in node.js",
   "main": "main.js",
   "scripts": {
-    "test": "cp config.example.json config.json && mocha"
+    "test": "cp config.example.json config.json && mocha --exit"
   },
   "author": "https://github.com/ian321",
   "license": "MIT",
