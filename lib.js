@@ -54,6 +54,29 @@ function stringToHex(str) {
   }
   return out;
 }
+async function getUserData(id) {
+  const { body } = await got.get(`https://api.twitch.tv/kraken/streams/${id}`, {
+    json: true,
+    headers: {
+      Accept: 'application/vnd.twitchtv.v5+json',
+      'client-id': conf.clientID || ''
+    }
+  });
+  if (!body.stream) {
+    const data = await got.get(`https://api.twitch.tv/kraken/users/${id}`, {
+      json: true,
+      headers: {
+        Accept: 'application/vnd.twitchtv.v5+json',
+        'client-id': conf.clientID || ''
+      }
+    });
+    const body2 = data.body;
+    body.stream = {
+      channel: body2
+    };
+  }
+  return body;
+}
 const getUser = {
   id(name) {
     return got.get(`https://api.twitch.tv/kraken/users?login=${name}`, {
@@ -67,18 +90,7 @@ const getUser = {
       return err;
     });
   },
-  data(id) {
-    return got.get(`https://api.twitch.tv/kraken/streams/${id}`, {
-      json: true,
-      headers: {
-        Accept: 'application/vnd.twitchtv.v5+json',
-        'client-id': conf.clientID || ''
-      }
-    }).then(res => res.body).catch(err => {
-      console.error(`Could not get date for '${id}'`);
-      return err;
-    });
-  }
+  data: getUserData
 };
 function setLongTimeout(callback, timeoutMs) {
   if (timeoutMs > 2147483647) {
