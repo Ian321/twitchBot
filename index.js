@@ -196,69 +196,7 @@ function sha512(channel, user, message, args) {
 }
 
 function math(channel, user, message) {
-  // escape strings
-  let tmp = message.replace(/[\\$'"]/g, '\\$&');
-  tmp = tmp.substr(message.indexOf(' ') + 1).split('"').join('');
-  if (tmp.indexOf('import') > -1 || tmp.indexOf('range') > -1 || tmp.indexOf('eye') > -1 ||
-        tmp.indexOf('ones') > -1 || tmp.indexOf('tojson') > -1 || tmp.indexOf('topolar') > -1 ||
-        tmp.indexOf('zeros') > -1 || tmp.indexOf('distance') > -1 || tmp.indexOf('help') > -1) {
-    return sendMessage(channel, `${user.username}, that function is not allowed ariW`);
-  }
-  if (tmp.indexOf('isPrime') > -1) {
-    let tmpP = tmp.replace(/ /g, '').split('isPrime(')[1];
-    if (tmp.split('isPrime(')[2]) {
-      return sendMessage(channel, `${user.username}, invalid input ariW`);
-    } else if ((tmp.match(/\(/g) || []).length !== (tmp.match(/\)/g) || []).length) {
-      return sendMessage(channel, `${user.username}, invalid input ariW`);
-    }
-    let count;
-    try {
-      count = (tmpP.match(/\(/g) || []).length;
-      count++;
-    } catch (e) {
-      return sendMessage(channel, `${user.username}, invalid input ariW`);
-    }
-    const rek = new RegExp(`^(?:[^|\\)]*\\)){${count.toString()}}([^|]*)`, 'gm');
-    const keepo = rek.exec(tmpP);
-    let vislaud = '';
-    keepo.shift();
-    for (let i = 0; i < keepo.length; i++) {
-      vislaud += keepo[i];
-    }
-    tmpP = `(${tmpP.replace(vislaud, '')}`;
-    let resultE = true;
-    let resultP;
-    try {
-      resultP = mathjs.eval(tmpP);
-      if (resultP.toString() === 'Infinity' || resultP.toString() === '-Infinity' || resultP.toString() === 'NaN') {
-        resultE = false;
-      }
-    } catch (e) {
-      resultE = false;
-    }
-    if (!resultE || resultP.toString().length >= 15) {
-      return sendMessage(channel, `${user.username}, can't check if it's a prime number WutFace`);
-    }
-    tmp = `isPrime(${resultP})`;
-  }
-  try {
-    let result = mathjs.eval(tmp);
-    if (result.toString() === 'Infinity' || result.toString() === '-Infinity') {
-      result = `WutFace it's '${result}'`;
-    } else if (result.toString() === 'NaN') {
-      result = `NaM it's '${result}'`;
-    }
-    if (result.toString().indexOf('function') > -1) {
-      result = 'you don\'t wanna know what that function does ;p';
-    }
-    const tmpMess = `${user.username}, ${result}`;
-    if (tmpMess.length >= conf.messages.maxLength) {
-      return sendMessage(channel, `${user.username}, the result was too long WutFace`);
-    }
-    return sendMessage(channel, tmpMess);
-  } catch (e) {
-    return sendMessage(channel, `${user.username}, invalid input ariW`);
-  }
+  return sendMessage(channel, `${user.username}, ${lib.mathEval(message)}`);
 }
 
 function hug(channel, user, message, args) {

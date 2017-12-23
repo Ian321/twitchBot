@@ -2,7 +2,8 @@
   Custom library
 */
 const got = require('got');
-const conf = require('./config.json');
+const mathjs = require('mathjs');
+const conf = require('./config.json') || require('./config.example.json'); // eslint-disable-line
 
 function msToTimeString(ms) {
   // This functions converts ms to a human friendly string.
@@ -18,7 +19,7 @@ function msToTimeString(ms) {
     time += `${days} day`;
   }
   if (days >= 1 && ((hours >= 1 && mins >= 1) || (hours >= 1 && secs >= 1) || (mins >= 1 && secs >= 1))) {
-    time += ', ';
+    time += '';
   } else if (days >= 1 && (hours >= 1 || mins >= 1 || secs >= 1)) {
     time += ' and ';
   }
@@ -28,7 +29,7 @@ function msToTimeString(ms) {
     time += `${hours} hour`;
   }
   if (hours >= 1 && mins >= 1 && secs >= 1) {
-    time += ', ';
+    time += '';
   } else if (hours >= 1 && (mins >= 1 || secs >= 1)) {
     time += ' and ';
   }
@@ -112,11 +113,81 @@ function uniqueObjArray(array) {
 
   return out.map(element => JSON.parse(element));
 }
+/**
+ * @param {string} e
+ */
+function mathEval(e) {
+  // escape strings
+  let tmp = e.replace(/[\\$'"]/g, '\\$&');
+  tmp = tmp.substr(e.indexOf(' ') + 1).split('"').join('');
+  if (tmp.indexOf('import') > -1 || tmp.indexOf('range') > -1 || tmp.indexOf('eye') > -1 ||
+        tmp.indexOf('ones') > -1 || tmp.indexOf('tojson') > -1 || tmp.indexOf('topolar') > -1 ||
+        tmp.indexOf('zeros') > -1 || tmp.indexOf('distance') > -1 || tmp.indexOf('help') > -1) {
+    return 'that function is not allowed ariW';
+  }
+  // Fix multiple isPrime
+  if (tmp.indexOf('isPrime') > -1) {
+    let tmpP = tmp.replace(/ /g, '').split('isPrime(')[1];
+    if (tmp.split('isPrime(')[2]) {
+      return 'invalid input ariW';
+    } else if ((tmp.match(/\(/g) || []).length !== (tmp.match(/\)/g) || []).length) {
+      return 'invalid input ariW';
+    }
+    let count;
+    try {
+      count = (tmpP.match(/\(/g) || []).length;
+      count++;
+    } catch (err) {
+      return 'invalid input ariW';
+    }
+    const rek = new RegExp(`^(?:[^|\\)]*\\)){${count.toString()}}([^|]*)`, 'gm');
+    const keepo = rek.exec(tmpP);
+    let vislaud = '';
+    keepo.shift();
+    for (let i = 0; i < keepo.length; i++) {
+      vislaud += keepo[i];
+    }
+    tmpP = `(${tmpP.replace(vislaud, '')}`;
+    let resultE = true;
+    let resultP;
+    try {
+      resultP = mathjs.eval(tmpP);
+      if (resultP.toString() === 'Infinity' || resultP.toString() === '-Infinity' || resultP.toString() === 'NaN') {
+        resultE = false;
+      }
+    } catch (err) {
+      resultE = false;
+    }
+    if (!resultE || resultP.toString().length >= 15) {
+      return 'can\'t check if it\'s a prime number WutFace';
+    }
+    tmp = `isPrime(${resultP})`;
+  }
+  // Evaluate the equation
+  try {
+    let result = mathjs.eval(tmp);
+    if (result.toString() === 'Infinity' || result.toString() === '-Infinity') {
+      result = `WutFace it's '${result}'`;
+    } else if (result.toString() === 'NaN') {
+      result = `NaM it's '${result}'`;
+    }
+    if (result.toString().indexOf('function') > -1) {
+      result = 'you don\'t wanna know what that function does ;p';
+    }
+    if (result.length + 40 >= conf.messages.maxLength) {
+      return 'the result was too long WutFace';
+    }
+    return result;
+  } catch (err) {
+    return 'invalid input ariW';
+  }
+}
 
 module.exports = {
   msToTimeString,
   stringToHex,
   getUser,
   setLongTimeout,
-  uniqueObjArray
+  uniqueObjArray,
+  mathEval
 };

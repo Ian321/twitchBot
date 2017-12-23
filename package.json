@@ -1,8 +1,8 @@
 {
   "name": "twitchbot",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "A Twitch Bot made in node.js",
-  "main": "main.js",
+  "main": "index.js",
   "scripts": {
     "test": "cp config.example.json config.json && mocha --exit"
   },
