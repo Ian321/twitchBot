@@ -226,7 +226,7 @@ function version(channel) {
 
 let agdqT = new Date().getTime();
 function agdq(channel, user) {
-  if (agdqT > (new Date().getTime() - (1000 * 60 * 2))) {
+  if (agdqT < (new Date().getTime() - (1000 * 60 * 2))) {
     return;
   }
   agdqT = new Date().getTime();
