@@ -233,7 +233,7 @@ function agdq(channel, user) {
   lib.getUser.id('gamesdonequick').then(id => {
     lib.getUser.data(id).then(data => {
       if (data.stream.stream_type === 'live') {
-        sendMessage(channel, `${user.username}, GDQ is live with "${data.stream.game}" PagChomp Here is the schedule: https://gamesdonequick.com/schedule`);
+        sendMessage(channel, `${user.username}, GDQ is live ${data.stream.game ? `with "${data.stream.game}"` : ''} PagChomp Here is the schedule: https://gamesdonequick.com/schedule`);
         return;
       }
       sendMessage(channel, `${user.username}, GDQ is offline FeelsBadMan`);
