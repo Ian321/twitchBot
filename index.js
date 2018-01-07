@@ -120,9 +120,7 @@ function sendMessage(channel, message, skipQ = false) {
     _sendMessage(channel, message);
   } else {
     messageQ.push({ channel, message });
-    console.log(messageQ);
     messageQ = lib.uniqueObjArray(messageQ);
-    console.log(messageQ);
   }
   lastMessage = new Date().getTime();
 }
@@ -224,9 +222,10 @@ function version(channel) {
     `for ${lib.msToTimeString(Date.now() - startTime)}`);
 }
 
-let agdqT = new Date().getTime();
+// 30 sec timeout for agdq()
+let agdqT = new Date().getTime() - (1000 * 30);
 function agdq(channel, user) {
-  if (agdqT < (new Date().getTime() - (1000 * 60 * 0.5))) {
+  if (agdqT > (new Date().getTime() - (1000 * 30))) {
     return;
   }
   agdqT = new Date().getTime();
