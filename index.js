@@ -224,13 +224,19 @@ function version(channel) {
     `for ${lib.msToTimeString(Date.now() - startTime)}`);
 }
 
+let agdqT = new Date().getTime();
 function agdq(channel, user) {
-  return lib.getUser.id('gamesdonequick').then(id => {
+  if (agdqT > Date().getTime() - (1000 * 60 * 2)) {
+    return;
+  }
+  agdqT = new Date().getTime();
+  lib.getUser.id('gamesdonequick').then(id => {
     lib.getUser.data(id).then(data => {
       if (data.stream.stream_type === 'live') {
-        return sendMessage(channel, `${user.username}, GDQ is live with "${data.stream.game}" PagChomp`);
+        sendMessage(channel, `${user.username}, GDQ is live with "${data.stream.game}" PagChomp Here is the schedule: https://gamesdonequick.com/schedule`);
+        return;
       }
-      return sendMessage(channel, `${user.username}, GDQ is offline FeelsBadMan`);
+      sendMessage(channel, `${user.username}, GDQ is offline FeelsBadMan`);
     }).catch(err => err);
   }).catch(err => err);
 }
