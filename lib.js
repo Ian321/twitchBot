@@ -19,7 +19,7 @@ function msToTimeString(ms) {
     time += `${days} day`;
   }
   if (days >= 1 && ((hours >= 1 && mins >= 1) || (hours >= 1 && secs >= 1) || (mins >= 1 && secs >= 1))) {
-    time += '';
+    time += ', ';
   } else if (days >= 1 && (hours >= 1 || mins >= 1 || secs >= 1)) {
     time += ' and ';
   }
@@ -29,7 +29,7 @@ function msToTimeString(ms) {
     time += `${hours} hour`;
   }
   if (hours >= 1 && mins >= 1 && secs >= 1) {
-    time += '';
+    time += ', ';
   } else if (hours >= 1 && (mins >= 1 || secs >= 1)) {
     time += ' and ';
   }
@@ -46,6 +46,7 @@ function msToTimeString(ms) {
   } else if (secs >= 1) {
     time += `${secs} second`;
   }
+  console.log(`'${time}'`);
   return time;
 }
 function stringToHex(str) {

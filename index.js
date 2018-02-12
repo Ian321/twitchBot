@@ -4,7 +4,6 @@
 */
 const tmi = require('tmi.js');
 const crypto = require('crypto');
-const mathjs = require('mathjs');
 const Datastore = require('nedb');
 const metadata = require('./package.json');
 const conf = require('./config.json') || require('./config.example.json'); // eslint-disable-line
