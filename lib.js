@@ -5,6 +5,10 @@ const got = require('got');
 const mathjs = require('mathjs');
 const conf = require('./config.json') || require('./config.example.json'); // eslint-disable-line
 
+mathjs.config({
+  number: 'BigNumber'
+});
+
 function msToTimeString(ms) {
   // This functions converts ms to a human friendly string.
   const sec = Math.floor(ms / 1000);
@@ -167,12 +171,13 @@ function mathEval(e) {
   // Evaluate the equation
   try {
     let result = mathjs.eval(tmp);
-    if (result.toString() === 'Infinity' || result.toString() === '-Infinity') {
+    result = result.toString();
+    if (result === 'Infinity' || result === '-Infinity') {
       result = `WutFace it's '${result}'`;
-    } else if (result.toString() === 'NaN') {
+    } else if (result === 'NaN') {
       result = `NaM it's '${result}'`;
     }
-    if (result.toString().indexOf('function') > -1) {
+    if (result.indexOf('function') > -1) {
       result = 'you don\'t wanna know what that function does ;p';
     }
     if (result.length + 40 >= conf.messages.maxLength) {
