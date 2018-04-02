@@ -172,6 +172,17 @@ function mathEval(e) {
   try {
     let result = mathjs.eval(tmp);
     result = result.toString();
+    // Check if its repeating the same number (twitch chat doesn't like that)
+    if (result.match(/(.)\1+$/) && result.match(/(.)\1+$/)[0] && result.match(/(.)\1+$/)[0].length >= 8) {
+      result = result.replace(/(.)\1+$/, (f, $1) => `${$1}${$1}${$1}...`);
+    } else {
+      const tmp1 = result.split('');
+      tmp1.pop();
+      const tmp2 = tmp1.join('');
+      if (tmp2.match(/(.)\1+$/) && tmp2.match(/(.)\1+$/)[0] && tmp2.match(/(.)\1+$/)[0].length >= 8) {
+        result = tmp2.replace(/(.)\1+$/, (f, $1) => `${$1}${$1}${$1}...`);
+      }
+    }
     if (result === 'Infinity' || result === '-Infinity') {
       result = `WutFace it's '${result}'`;
     } else if (result === 'NaN') {

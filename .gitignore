@@ -1,6 +1,7 @@
 # Config file
 config.json
 commands
+launch.json
 
 # Logs
 logs
