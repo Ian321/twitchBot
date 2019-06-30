@@ -2,12 +2,12 @@
   Custom library
 */
 const got = require('got');
-const mathjs = require('mathjs');
+const {create, all} = require('mathjs');
+
 const conf = require('./config.json') || require('./config.example.json'); // eslint-disable-line
 
-mathjs.config({
-  number: 'BigNumber'
-});
+const mathjs = create(all);
+mathjs.config({ number: 'BigNumber' });
 
 function msToTimeString(ms) {
   // This functions converts ms to a human friendly string.
@@ -50,7 +50,6 @@ function msToTimeString(ms) {
   } else if (secs >= 1) {
     time += `${secs} second`;
   }
-  console.log(`'${time}'`);
   return time;
 }
 function stringToHex(str) {

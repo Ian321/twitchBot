@@ -57,21 +57,21 @@ const { admins } = conf;
 
 // Map a command to a function
 const commands = {
-  '!say': say,
+  '*say': say,
   '*ping': ping,
   '!pingall': ping,
-  '!list': list,
-  '!node': node,
+  '*list': list,
+  '*node': node,
   '*gtfo': gtfo,
-  '!sha512': sha512,
+  '*sha512': sha512,
   '*math': math,
-  '!hug': hug,
+  '*hug': hug,
   '*eval': myEval,
   '*version': version,
   '*cmd': cmd,
-  '!agdq': agdq,
-  '!sgdq': agdq,
-  '!gdq': agdq
+  '*agdq': agdq,
+  '*sgdq': agdq,
+  '*gdq': agdq
 };
 
 db.find({}, (err, docs) => {
@@ -153,14 +153,16 @@ client.on('chat', (channel, user, message, self) => {
 
 // Join / Leave
 client.on('join', (channel, username, self) => {
-  if (self) {
+  if (self && conf.messages.join) {
     sendMessage(channel, conf.messages.join);
   }
 });
 
 function gtfo(channel, user) {
   if (user.admin) {
-    sendMessage(channel, conf.messages.leave);
+    if (conf.messages.leave) {
+      sendMessage(channel, conf.messages.leave);
+    }
     process.exit(0);
   }
 }

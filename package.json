@@ -9,15 +9,15 @@
   "author": "https://github.com/ian321",
   "license": "MIT",
   "dependencies": {
-    "got": "^7.1.0",
-    "mathjs": "^3.16.5",
+    "got": "^9.6.0",
+    "mathjs": "^6.0.2",
     "nedb": "^1.8.0",
     "timezone-js": "^0.4.13",
-    "tmi.js": "^1.2.1",
-    "tzdata": "^1.0.7"
+    "tmi.js": "^1.4.5",
+    "tzdata": "^1.0.16"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
-    "mocha": "^4.0.1"
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4"
   }
 }
