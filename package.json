@@ -9,7 +9,7 @@
   "author": "https://github.com/ian321",
   "license": "MIT",
   "dependencies": {
-    "got": "^9.6.0",
+    "got": "^11.8.5",
     "mathjs": "^7.5.1",
     "nedb": "^1.8.0",
     "timezone-js": "^0.4.13",
